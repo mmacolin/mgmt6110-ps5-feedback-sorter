@@ -97,6 +97,14 @@
   .hint { margin-top: 12px; background: var(--strip); border-left: 3px solid var(--eyebrow); padding: 8px 14px; font-style: italic; color: var(--eyebrow); font-size: 15px; }
   .hint::before { content: "▸ "; font-style: normal; }
 
+  .ps5 { margin-top: 28px; }
+  .ps5 h2 { font-size: 22px; font-weight: 600; margin: 0 0 12px; }
+  .agent-card { border: 1px solid var(--line); border-left: 5px solid var(--eyebrow); border-radius: 4px; background: var(--panel); padding: 16px 20px; }
+  .agent-card .head { font-weight: 700; margin: 0 0 10px; }
+  .agent-card ol { margin: 0; padding-left: 22px; }
+  .agent-card li { margin: 6px 0; font-size: 16px; }
+  .agent-card li b { font-weight: 600; }
+
   footer { margin-top: 26px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 
   @media (max-width: 760px) {
@@ -139,6 +147,20 @@
     <div class="cards" id="cards"></div>
 
     <p class="hint">Click a task card to place it, or Show all. The placements are our own, for discussion. You may well place some differently.</p>
+  </section>
+
+  <section class="ps5" id="agent-card" aria-label="My agent card">
+    <h2>My PS5 agent</h2>
+    <div class="agent-card">
+      <p class="head">My agent card | Post-Purchase Feedback Sorter | finished [DATE AND TIME]</p>
+      <ol>
+        <li><b>The job:</b> Sorts each new post-purchase feedback response into a theme and sentiment using keyword rules in Google Sheets, then emails me a labelled summary, for an online shop’s customer experience manager.</li>
+        <li><b>The trigger:</b> A new row in the responses sheet of my Google Form “Post-Purchase Feedback (test)”.</li>
+        <li><b>The tools:</b> Google Sheets (New Spreadsheet Row, reads the response and its labels) and Gmail (Send Email, to my own address only).</li>
+        <li><b>It must never:</b> Email anyone but me; the Gmail “To” field is typed as my own address, with no mapped fields.</li>
+        <li><b>Where a person checks:</b> I read every labelled email each evening and personally follow up any response that needs a reply or is marked “Unclear – needs review” before results are shared.</li>
+      </ol>
+    </div>
   </section>
 
   <footer>
