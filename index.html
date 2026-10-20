@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Task Map</title>
+<meta name="description" content="Our group's five AI-agent tasks placed on the map of human-AI collaboration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #14213d;
+    --muted: #5b6577;
+    --line: #d7dde6;
+    --accent: #c8364a;
+    --eyebrow: #2a6f97;
+    --panel: #fafbfd;
+    --q-pink: #fbf3f8;
+    --q-pink-line: #e3c6db;
+    --q-blue: #f1f6fa;
+    --q-blue-line: #bfd3e3;
+    --strip: #f2f4f8;
+    --q-title: #3d2b6b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1420; --ink: #e8ecf3; --muted: #9aa5b8; --line: #2a3346;
+      --accent: #ef6b7d; --eyebrow: #6fb3dc; --panel: #141a28;
+      --q-pink: #23192a; --q-pink-line: #4b3550; --q-blue: #15212e; --q-blue-line: #2d4a63;
+      --strip: #1a2131; --q-title: #cdbcf2;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1420; --ink: #e8ecf3; --muted: #9aa5b8; --line: #2a3346;
+    --accent: #ef6b7d; --eyebrow: #6fb3dc; --panel: #141a28;
+    --q-pink: #23192a; --q-pink-line: #4b3550; --q-blue: #15212e; --q-blue-line: #2d4a63;
+    --strip: #1a2131; --q-title: #cdbcf2;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Jost", system-ui, sans-serif; line-height: 1.45;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 16px 24px; }
+
+  .eyebrow { color: var(--eyebrow); font-weight: 700; letter-spacing: .18em; font-size: 15px; text-transform: uppercase; margin: 0 0 18px; }
+  h1 { font-size: clamp(22px, 3vw, 28px); margin: 0 0 8px; font-weight: 600; }
+  .lede { margin: 0 0 22px; font-size: 17px; color: var(--ink); }
+
+  .panel {
+    border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 4px; background: var(--panel); padding: 18px 20px 16px;
+  }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .badge {
+    background: var(--accent); color: #fff; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; font-size: 14px; padding: 7px 16px; border-radius: 999px;
+  }
+  .badge::before { content: "●"; color: #ffc94d; margin-right: 8px; font-size: 10px; vertical-align: 2px; }
+  .counter { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 17px; }
+
+  .grid {
+    display: grid; grid-template-columns: 170px 1fr 1fr; gap: 10px 14px; align-items: stretch;
+  }
+  .col-head { text-align: center; font-weight: 600; font-size: 17px; padding-bottom: 2px; }
+  .row-label { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 500; font-size: 15px; padding: 0 6px; }
+  .quad { border: 1.5px solid; border-radius: 8px; padding: 12px 14px; min-height: 150px; }
+  .quad.pink { background: var(--q-pink); border-color: var(--q-pink-line); }
+  .quad.blue { background: var(--q-blue); border-color: var(--q-blue-line); }
+  .quad h3 { margin: 0 0 12px; font-size: 15px; font-weight: 600; color: var(--q-title); }
+  .dots { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .dot { display: flex; align-items: center; gap: 9px; font-size: 14px; animation: pop .25s ease-out; }
+  .dot i { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+  @keyframes pop { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .explain {
+    margin: 16px 0 14px; background: var(--strip); border-left: 3px solid var(--eyebrow);
+    padding: 11px 16px; font-size: 16px; min-height: 46px;
+  }
+  .explain b { color: var(--accent); font-weight: 600; }
+  .explain .meta { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); }
+
+  .cards { display: flex; flex-wrap: wrap; gap: 8px; }
+  .card, .btn {
+    font: inherit; font-size: 16px; font-weight: 500; cursor: pointer;
+    border: 2px solid var(--ink); background: transparent; color: var(--ink);
+    padding: 5px 11px; border-radius: 3px; text-align: left;
+    transition: background .15s, color .15s;
+  }
+  .card:hover, .btn:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+  .card.placed { color: #fff; }
+  .card:focus-visible, .btn:focus-visible { outline: 3px solid var(--eyebrow); outline-offset: 2px; }
+  .btn.solid { background: var(--ink); color: var(--bg); }
+
+  .hint { margin-top: 12px; background: var(--strip); border-left: 3px solid var(--eyebrow); padding: 8px 14px; font-style: italic; color: var(--eyebrow); font-size: 15px; }
+  .hint::before { content: "▸ "; font-style: normal; }
+
+  footer { margin-top: 26px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+    .col-head, .row-label { display: none; }
+    .quad { min-height: 0; }
+    .quad h3 small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  }
+  @media (min-width: 761px) { .quad h3 small { display: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Place a task · Our turn</p>
+  <h1>Where would you place each of our tasks, and who should lead it?</h1>
+  <p class="lede">Each of us designed one task for an AI agent. Call the quadrant for each task before you click. Our placement and its reason appear below.</p>
+
+  <section class="panel" aria-label="Interactive task map">
+    <div class="panel-head">
+      <span class="badge">Group task map</span>
+      <span class="counter" id="counter" aria-live="polite">0 of 5 placed</span>
+    </div>
+
+    <div class="grid">
+      <div></div>
+      <div class="col-head">Work with a right answer</div>
+      <div class="col-head">Work with no single right answer</div>
+
+      <div class="row-label">Work that people and AI must do together</div>
+      <div class="quad pink" data-q="lead"><h3>A person leads, AI inside<small>Right answer · do together</small></h3><div class="dots"></div></div>
+      <div class="quad blue" data-q="agents"><h3>Agents run it, a person judges<small>No single answer · do together</small></h3><div class="dots"></div></div>
+
+      <div class="row-label">Work that either of them can do alone</div>
+      <div class="quad blue" data-q="alone"><h3>AI alone, with checks<small>Right answer · either alone</small></h3><div class="dots"></div></div>
+      <div class="quad pink" data-q="decides"><h3>A person decides, AI alongside<small>No single answer · either alone</small></h3><div class="dots"></div></div>
+    </div>
+
+    <div class="explain" id="explain" aria-live="polite">Pick a task card below to see where we placed it and why.</div>
+
+    <div class="cards" id="cards"></div>
+
+    <p class="hint">Click a task card to place it, or Show all. The placements are our own, for discussion. You may well place some differently.</p>
+  </section>
+
+  <footer>
+    <span>Map of Human-AI Collaboration · Group project</span>
+    <span>Five tasks · four quadrants</span>
+  </footer>
+</div>
+
+<script>
+  // Edit `owner` to show each teammate's name on the cards.
+  const TASKS = [
+    {
+      id: "portfolio", owner: "Finance", color: "#1f7a4d",
+      task: "Daily 9am portfolio summary", q: "alone",
+      reason: "Prices, returns and allocations are facts with a right answer, so AI can compile the summary alone on a schedule.",
+      check: "Figures are reconciled against the brokerage data, and the summary reports what happened without giving advice."
+    },
+    {
+      id: "email", owner: "Inbox", color: "#c8364a",
+      task: "Daily 9am urgent email summary", q: "decides",
+      reason: "What counts as urgent depends on the person's own priorities, so there is no single right answer. AI sorts and summarises, and the person decides what to act on.",
+      check: "The person reviews the priority list each morning and corrects what AI marked as urgent."
+    },
+    {
+      id: "internship", owner: "Careers", color: "#2a6f97",
+      task: "Track internship application status", q: "alone",
+      reason: "Each application has a factual status (applied, assessment, interview, offer, rejected), so AI can track it across email alone.",
+      check: "Emails that AI can't classify confidently are flagged for the person to read."
+    },
+    {
+      id: "school", owner: "School", color: "#a77c12",
+      task: "Track school projects and deadlines", q: "lead",
+      reason: "Deadlines have a right answer, but they come from the syllabus, the LMS, group chats and announcements in class, and the student answers for a missed one. The student leads and AI keeps the tracker up to date.",
+      check: "The student confirms each new deadline before it goes into the tracker."
+    },
+    {
+      id: "forms", owner: "Customers", color: "#6a4bb5",
+      task: "Analyse and categorise Google Forms feedback", q: "agents",
+      reason: "There is no single right way to group open-ended customer responses into themes. Agents cluster and count the responses, and a person judges whether the categories make sense for the business.",
+      check: "A person reviews the categories and a sample of responses before the results are shared."
+    }
+  ];
+
+  const QUAD_NAMES = {
+    lead: "A person leads, AI inside",
+    agents: "Agents run it, a person judges",
+    alone: "AI alone, with checks",
+    decides: "A person decides, AI alongside"
+  };
+
+  const placed = new Set();
+  const cardsEl = document.getElementById("cards");
+  const explainEl = document.getElementById("explain");
+  const counterEl = document.getElementById("counter");
+
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function renderCards() {
+    cardsEl.innerHTML = "";
+    TASKS.forEach(t => {
+      const b = document.createElement("button");
+      b.className = "card" + (placed.has(t.id) ? " placed" : "");
+      b.textContent = `${t.owner} · ${t.task}`;
+      b.style.borderColor = t.color;
+      if (placed.has(t.id)) b.style.background = t.color;
+      b.setAttribute("aria-pressed", placed.has(t.id));
+      b.onclick = () => place(t);
+      cardsEl.appendChild(b);
+    });
+    const all = document.createElement("button");
+    all.className = "btn solid"; all.textContent = "Show all"; all.onclick = showAll;
+    const clear = document.createElement("button");
+    clear.className = "btn"; clear.textContent = "Clear"; clear.onclick = reset;
+    cardsEl.append(all, clear);
+  }
+
+  function renderDots() {
+    document.querySelectorAll(".quad .dots").forEach(d => (d.innerHTML = ""));
+    TASKS.filter(t => placed.has(t.id)).forEach(t => {
+      const box = document.querySelector(`.quad[data-q="${t.q}"] .dots`);
+      const el = document.createElement("div");
+      el.className = "dot";
+      el.innerHTML = `<i style="background:${t.color}"></i><span>${esc(t.owner)} · ${esc(t.task)}</span>`;
+      box.appendChild(el);
+    });
+    counterEl.textContent = `${placed.size} of ${TASKS.length} placed`;
+  }
+
+  function place(t) {
+    placed.add(t.id);
+    explainEl.innerHTML =
+      `<b>${esc(t.owner)} · ${esc(t.task)}</b> → ${QUAD_NAMES[t.q]}. ${esc(t.reason)}` +
+      `<span class="meta">The check: ${esc(t.check)}</span>`;
+    renderDots(); renderCards();
+  }
+
+  function showAll() {
+    TASKS.forEach(t => placed.add(t.id));
+    explainEl.textContent =
+      "All five tasks are placed. Each one is a task an AI agent could run on a schedule, but who leads depends on whether there is a right answer and who answers for the outcome.";
+    renderDots(); renderCards();
+  }
+
+  function reset() {
+    placed.clear();
+    explainEl.textContent = "Pick a task card below to see where we placed it and why.";
+    renderDots(); renderCards();
+  }
+
+  renderCards();
+</script>
+</body>
+</html>
